@@ -1,8 +1,21 @@
-const body = document.querySelector("body");
 const announceWinner = document.querySelector(".announceWinner");
 const roundResult = document.querySelector(".roundResult");
 const score = document.querySelector(".score");
 const containerButtons = document.querySelectorAll(".container button");
+const restartGame = document.querySelector(".restart-button");
+restartGame.setAttribute("disabled", "disabled");
+
+restartGame.addEventListener("click", function () {
+  computerScore = 0;
+  humanScore = 0;
+  score.textContent = `Score: ${humanScore} / ${computerScore}`;
+  roundResult.textContent = "Get ready to lose against this awesome computer!";
+  announceWinner.textContent = "";
+  containerButtons.forEach((btn) => {
+    btn.removeAttribute("disabled");
+  });
+  restartGame.setAttribute("disabled", "disabled");
+});
 
 containerButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -36,13 +49,17 @@ function playRound(humanChoice, computerChoice) {
 
   if (computerScore === 5) {
     announceWinner.textContent = "The Computer won the game!";
-    // add restartGame to DOM so player can start new round
-    createRestartGameButton();
+    containerButtons.forEach((btn) => {
+      btn.setAttribute("disabled", "disabled");
+    });
+    restartGame.removeAttribute("disabled");
   }
   if (humanScore === 5) {
     announceWinner.textContent = "You won the game!";
-    // add restartGame to DOM so player can start new round
-    createRestartGameButton();
+    containerButtons.forEach((btn) => {
+      btn.setAttribute("disabled", "disabled");
+    });
+    restartGame.removeAttribute("disabled");
   }
 }
 
@@ -63,20 +80,4 @@ function getComputerChoice() {
   }
 
   return computerChoice;
-}
-
-function createRestartGameButton() {
-  const restartGame = document.createElement("button");
-  restartGame.textContent = "Restart Game";
-  body.append(restartGame);
-
-  restartGame.addEventListener("click", function reset(event) {
-    computerScore = 0;
-    humanScore = 0;
-    score.textContent = `Score: ${humanScore} / ${computerScore}`;
-    roundResult.textContent =
-      "Get ready to lose against this awesome computer!";
-    announceWinner.textContent = "";
-    restartGame.remove();
-  });
 }
